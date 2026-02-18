@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google</title>
+    <link rel="icon" type="image/x-icon" href="https://www.google.com/favicon.ico">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background: #0b0b0b;
+            color: white;
+            overflow: hidden;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #000;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #333;
+            height: 50px;
+            box-sizing: border-box;
+            z-index: 100;
+        }
+
+        .nav-left { display: flex; gap: 20px; align-items: center; }
+        .logo { font-weight: bold; color: #00f2ff; letter-spacing: 1px; }
+        
+        .nav-btn {
+            background: #222;
+            color: white;
+            border: 1px solid #444;
+            padding: 5px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .nav-btn:hover { background: #333; }
+
+        /* Home Grid - Fixed stretching */
+        #portal-home {
+            padding: 50px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 220px);
+            grid-auto-rows: 200px; /* Fixed height for all cards */
+            gap: 20px;
+            height: calc(100vh - 50px);
+            background: radial-gradient(circle at top, #1a1a1a, #000);
+            box-sizing: border-box;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .card {
+            background: #181818;
+            border-radius: 12px;
+            border: 1px solid #333;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #00f2ff;
+            box-shadow: 0 5px 15px rgba(0, 242, 255, 0.2);
+        }
+
+        .card-img { flex: 1; background: #222; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+        .card-info { padding: 10px; background: #181818; border-top: 1px solid #333; }
+        .card-info h3 { margin: 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .delete-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            z-index: 10;
+            font-weight: bold;
+        }
+
+        .add-btn { border-style: dashed; border-color: #555; background: transparent; }
+
+        #content-frame {
+            width: 100%;
+            height: calc(100vh - 50px);
+            border: none;
+            display: none;
+        }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<nav id="top-nav">
+    <div class="nav-left">
+        <div class="logo">G-PORTAL</div>
+        <button class="nav-btn" onclick="goHome()">🏠 Home</button>
+    </div>
+    <div style="color: #666; font-size: 0.7rem;">ESC to Panic</div>
+</nav>
+
+<div id="portal-home">
+    <div class="card" onclick="loadInIframe('https://chromebookunlocked.github.io/')">
+        <div class="card-img">🎮</div>
+        <div class="card-info"><h3>Games Library</h3></div>
+    </div>
+
+    <div class="card" onclick="loadInIframe('https://helios-browser.vercel.app/')">
+        <div class="card-img">🌐</div>
+        <div class="card-info"><h3>Web Proxy</h3></div>
+    </div>
+
+    <div id="custom-links-container" style="display: contents;"></div>
+
+    <div class="card add-btn" onclick="addShortcut()">
+        <div class="card-img">➕</div>
+        <div class="card-info"><h3>Add Shortcut</h3></div>
+    </div>
+</div>
+
+<iframe id="content-frame" src="about:blank" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+
+<script>
+    const frame = document.getElementById('content-frame');
+    const home = document.getElementById('portal-home');
+    const customContainer = document.getElementById('custom-links-container');
+
+    window.onload = displayShortcuts;
+
+    function goHome() {
+        frame.style.display = 'none';
+        frame.src = 'about:blank';
+        home.classList.remove('hidden');
+    }
+
+    function loadInIframe(url) {
+        home.classList.add('hidden');
+        frame.style.display = 'block';
+        frame.src = url;
+    }
+
+    function addShortcut() {
+        const name = prompt("Name:");
+        if (!name) return;
+        let url = prompt("URL:");
+        if (!url) return;
+        if (!url.startsWith('http')) url = 'https://' + url;
+
+        const newShortcut = { id: Date.now(), name, url };
+        const savedLinks = JSON.parse(localStorage.getItem('myShortcuts') || '[]');
+        savedLinks.push(newShortcut);
+        localStorage.setItem('myShortcuts', JSON.stringify(savedLinks));
+        displayShortcuts();
+    }
+
+    function removeShortcut(id, event) {
+        event.stopPropagation();
+        let savedLinks = JSON.parse(localStorage.getItem('myShortcuts') || '[]');
+        savedLinks = savedLinks.filter(link => link.id !== id);
+        localStorage.setItem('myShortcuts', JSON.stringify(savedLinks));
+        displayShortcuts();
+    }
+
+    function displayShortcuts() {
+        customContainer.innerHTML = '';
+        const savedLinks = JSON.parse(localStorage.getItem('myShortcuts') || '[]');
+        
+        savedLinks.forEach(link => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.onclick = () => {
+                const newWin = window.open();
+                newWin.opener = null;
+                newWin.location.href = link.url;
+            };
+            card.innerHTML = `
+                <button class="delete-btn" onclick="removeShortcut(${link.id}, event)">×</button>
+                <div class="card-img">🔗</div>
+                <div class="card-info"><h3>${link.name}</h3></div>
+            `;
+            customContainer.appendChild(card);
+        });
+    }
+
+    window.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            window.location.replace("https://www.google.com/search?q=educational+resources");
+        }
+    });
+</script>
+</body>
+</html>
