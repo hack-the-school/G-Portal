@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google</title>
+    <link rel="icon" type="image/x-icon" href="https://www.google.com/favicon.ico">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            font-family: arial, sans-serif;
+            background: #fff;
+            color: #202124;
+            overflow: hidden;
+        }
+
+        /* Fake Google Search Page Styles */
+        #google-home {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            align-items: center;
+        }
+
+        .google-nav {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding: 12px 20px;
+            box-sizing: border-box;
+            gap: 15px;
+            font-size: 13px;
+        }
+        .google-nav a { text-decoration: none; color: rgba(0,0,0,0.87); line-height: 24px; }
+
+        .search-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 100px;
+            width: 100%;
+        }
+
+        .google-logo {
+            width: 272px;
+            margin-bottom: 30px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .search-bar-wrapper {
+            width: 100%;
+            max-width: 584px;
+        }
+
+        .search-bar {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            padding: 0 45px;
+            box-sizing: border-box;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .google-footer {
+            width: 100%;
+            background: #f2f2f2;
+            position: absolute;
+            bottom: 0;
+            font-size: 14px;
+            color: #70757a;
+        }
+        .footer-bottom { padding: 15px 30px; display: flex; justify-content: space-between; }
+
+        /* Portal Navigation - The requested Header */
+        #portal-nav {
+            display: none;
+            background-color: #000;
+            padding: 0 20px;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #333;
+            height: 55px;
+            box-sizing: border-box;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .nav-left { display: flex; align-items: center; gap: 25px; }
+        .logo { font-weight: bold; color: #00f2ff; letter-spacing: 1px; font-size: 1.1rem; }
+        
+        .nav-btn {
+            background: #222;
+            color: white;
+            border: 1px solid #444;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .nav-btn:hover { background: #333; }
+
+        .credit-text {
+            font-size: 0.85rem;
+            color: #bbb;
+            letter-spacing: 0.5px;
+        }
+
+        .panic-text {
+            color: #666;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* REAL PORTAL STYLES */
+        #portal-home {
+            padding: 50px;
+            display: none;
+            grid-template-columns: repeat(auto-fill, 220px);
+            grid-auto-rows: 200px;
+            gap: 20px;
+            height: calc(100vh - 55px);
+            background: #0b0b0b;
+            box-sizing: border-box;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .card {
+            background: #181818;
+            border-radius: 12px;
+            border: 1px solid #333;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            color: white;
+            transition: 0.3s;
+        }
+        .card:hover { border-color: #00f2ff; transform: translateY(-5px); }
+        .card-img { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 3rem; background: #222; }
+        .card-info { padding: 10px; background: #181818; border-top: 1px solid #333; }
+        .card-info h3 { margin: 0; font-size: 0.85rem; text-transform: uppercase; }
+
+        #content-frame { width: 100%; height: calc(100vh - 55px); border: none; display: none; }
+    </style>
+</head>
+<body>
+
+<div id="google-home">
+    <div class="google-nav">
+        <a href="#">Gmail</a> <a href="#">Images</a>
+        <button style="background:#1a73e8; color:white; border:none; padding:8px 22px; border-radius:4px; font-weight:bold; cursor:pointer;">Sign in</button>
+    </div>
+    <div class="search-container">
+        <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" class="google-logo" alt="Google" onclick="showPortal()">
+        <div class="search-bar-wrapper"><input type="text" class="search-bar"></div>
+    </div>
+    <div class="google-footer">
+        <div class="footer-bottom">
+            <div style="display:flex; gap:25px;"><span>About</span><span>Advertising</span><span>Business</span></div>
+            <div style="display:flex; gap:25px;"><span>Privacy</span><span>Terms</span><span>Settings</span></div>
+        </div>
+    </div>
+</div>
+
+<nav id="portal-nav">
+    <div class="nav-left">
+        <div class="logo">G-PORTAL</div>
+        <button class="nav-btn" onclick="goHome()">🏠 Home</button>
+    </div>
+    <div class="credit-text">Made By CantBlockThis</div>
+    <div class="panic-text">ESC to Panic</div>
+</nav>
+
+<div id="portal-home">
+    <div class="card" onclick="loadInIframe('https://chromebookunlocked.github.io/')">
+        <div class="card-img">🎮</div>
+        <div class="card-info"><h3>Games Library</h3></div>
+    </div>
+    <div class="card" onclick="window.open('https://yandex.com/games/?pwa=1', '_blank')">
+        <div class="card-img">🕹️</div>
+        <div class="card-info"><h3>Yandex Games</h3></div>
+    </div>
+    <div class="card" onclick="loadInIframe('https://doxyedu.dpdns.org/')">
+        <div class="card-img">🌐</div>
+        <div class="card-info"><h3>Web Proxy</h3></div>
+    </div>
+</div>
+
+<iframe id="content-frame" src="about:blank" allowfullscreen="true"></iframe>
+
+<script>
+    const frame = document.getElementById('content-frame');
+    const portal = document.getElementById('portal-home');
+    const google = document.getElementById('google-home');
+    const pNav = document.getElementById('portal-nav');
+
+    function showPortal() {
+        google.style.display = 'none';
+        pNav.style.display = 'flex';
+        portal.style.display = 'grid';
+        document.body.style.background = "#0b0b0b";
+    }
+
+    function goHome() {
+        frame.style.display = 'none';
+        frame.src = 'about:blank';
+        pNav.style.display = 'flex';
+        portal.style.display = 'grid';
+    }
+
+    function loadInIframe(url) {
+        portal.style.display = 'none';
+        // We keep the Nav visible so the user can click "Home" or see the Panic key
+        pNav.style.display = 'flex'; 
+        frame.style.display = 'block';
+        frame.src = url;
+    }
+
+    // Panic Key: Redirect to real Google
+    window.addEventListener('keydown', function(event) {
+        if (event.key === "Escape") {
+            window.location.replace("https://www.google.com");
+        }
+    });
+</script>
+</body>
+</html>
