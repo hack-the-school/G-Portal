@@ -33,6 +33,13 @@
         .nav-left { display: flex; gap: 20px; align-items: center; }
         .logo { font-weight: bold; color: #00f2ff; letter-spacing: 1px; }
         
+        .nav-center {
+            font-size: 0.8rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
         .nav-btn {
             background: #222;
             color: white;
@@ -120,6 +127,7 @@
         <div class="logo">G-PORTAL</div>
         <button class="nav-btn" onclick="goHome()">🏠 Home</button>
     </div>
+    <div class="nav-center">Made By CantBlockThis</div>
     <div style="color: #666; font-size: 0.7rem;">ESC to Panic</div>
 </nav>
 
@@ -211,9 +219,10 @@
         });
     }
 
+    // Updated Panic Key Listener
     window.addEventListener('keydown', function(event) {
         if (event.key === "Escape") {
-            window.location.replace("https://www.google.com/search?q=educational+resources");
+            window.location.replace("https://www.google.com");
         }
     });
 </script>
