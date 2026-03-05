@@ -11,124 +11,176 @@
             padding: 0;
             height: 100%;
             width: 100%;
-            font-family: 'Segoe UI', sans-serif;
-            background: #0b0b0b;
-            color: white;
+            font-family: arial, sans-serif;
+            background: #fff;
+            color: #202124;
             overflow: hidden;
         }
 
-        /* Navigation */
-        nav {
-            background-color: #000;
-            padding: 10px 20px;
+        /* Fake Google Search Page Styles */
+        #google-home {
             display: flex;
+            flex-direction: column;
+            height: 100vh;
+            align-items: center;
+        }
+
+        .google-nav {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding: 12px 20px;
+            box-sizing: border-box;
+            gap: 15px;
+            font-size: 13px;
+        }
+        .google-nav a { text-decoration: none; color: rgba(0,0,0,0.87); line-height: 24px; }
+
+        .search-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 100px;
+            width: 100%;
+        }
+
+        .google-logo {
+            width: 272px;
+            margin-bottom: 30px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .search-bar-wrapper {
+            width: 100%;
+            max-width: 584px;
+        }
+
+        .search-bar {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            padding: 0 45px;
+            box-sizing: border-box;
+            outline: none;
+            font-size: 16px;
+        }
+
+        .google-footer {
+            width: 100%;
+            background: #f2f2f2;
+            position: absolute;
+            bottom: 0;
+            font-size: 14px;
+            color: #70757a;
+        }
+        .footer-bottom { padding: 15px 30px; display: flex; justify-content: space-between; }
+
+        /* Portal Navigation - The requested Header */
+        #portal-nav {
+            display: none;
+            background-color: #000;
+            padding: 0 20px;
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid #333;
-            height: 50px;
+            height: 55px;
             box-sizing: border-box;
-            z-index: 100;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
         }
 
-        .nav-left { display: flex; gap: 20px; align-items: center; }
-        .logo { font-weight: bold; color: #00f2ff; letter-spacing: 1px; }
-        
-        .nav-center {
-            font-size: 0.8rem;
-            color: #888;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+        .nav-left { display: flex; align-items: center; gap: 25px; }
+        .logo { font-weight: bold; color: #00f2ff; letter-spacing: 1px; font-size: 1.1rem; }
         
         .nav-btn {
             background: #222;
             color: white;
             border: 1px solid #444;
-            padding: 5px 15px;
+            padding: 6px 14px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
         .nav-btn:hover { background: #333; }
 
-        /* Home Grid with Background */
+        .credit-text {
+            font-size: 0.85rem;
+            color: #bbb;
+            letter-spacing: 0.5px;
+        }
+
+        .panic-text {
+            color: #666;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        /* REAL PORTAL STYLES */
         #portal-home {
             padding: 50px;
-            display: grid;
+            display: none;
             grid-template-columns: repeat(auto-fill, 220px);
             grid-auto-rows: 200px;
             gap: 20px;
-            height: calc(100vh - 50px);
-            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
-                        url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
+            height: calc(100vh - 55px);
+            background: #0b0b0b;
             box-sizing: border-box;
             justify-content: center;
             overflow-y: auto;
         }
 
         .card {
-            background: rgba(24, 24, 24, 0.9);
+            background: #181818;
             border-radius: 12px;
             border: 1px solid #333;
             cursor: pointer;
-            transition: 0.3s;
-            position: relative;
             text-align: center;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            backdrop-filter: blur(10px);
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: #00f2ff;
-            box-shadow: 0 5px 15px rgba(0, 242, 255, 0.4);
-        }
-
-        .card-img { flex: 1; background: rgba(34, 34, 34, 0.5); display: flex; align-items: center; justify-content: center; font-size: 3rem; }
-
-        .card-info { padding: 10px; background: #181818; border-top: 1px solid #333; }
-        .card-info h3 { margin: 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
-
-        .delete-btn {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(255, 0, 0, 0.8);
             color: white;
-            border: none;
-            border-radius: 50%;
-            width: 22px;
-            height: 22px;
-            cursor: pointer;
-            z-index: 10;
-            font-weight: bold;
+            transition: 0.3s;
         }
+        .card:hover { border-color: #00f2ff; transform: translateY(-5px); }
+        .card-img { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 3rem; background: #222; }
+        .card-info { padding: 10px; background: #181818; border-top: 1px solid #333; }
+        .card-info h3 { margin: 0; font-size: 0.85rem; text-transform: uppercase; }
 
-        .add-btn { border-style: dashed; border-color: #555; background: transparent; }
-
-        #content-frame {
-            width: 100%;
-            height: calc(100vh - 50px);
-            border: none;
-            display: none;
-        }
-
-        .hidden { display: none !important; }
+        #content-frame { width: 100%; height: calc(100vh - 55px); border: none; display: none; }
     </style>
 </head>
 <body>
 
-<nav id="top-nav">
+<div id="google-home">
+    <div class="google-nav">
+        <a href="#">Gmail</a> <a href="#">Images</a>
+        <button style="background:#1a73e8; color:white; border:none; padding:8px 22px; border-radius:4px; font-weight:bold; cursor:pointer;">Sign in</button>
+    </div>
+    <div class="search-container">
+        <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" class="google-logo" alt="Google" onclick="showPortal()">
+        <div class="search-bar-wrapper"><input type="text" class="search-bar"></div>
+    </div>
+    <div class="google-footer">
+        <div class="footer-bottom">
+            <div style="display:flex; gap:25px;"><span>About</span><span>Advertising</span><span>Business</span></div>
+            <div style="display:flex; gap:25px;"><span>Privacy</span><span>Terms</span><span>Settings</span></div>
+        </div>
+    </div>
+</div>
+
+<nav id="portal-nav">
     <div class="nav-left">
         <div class="logo">G-PORTAL</div>
         <button class="nav-btn" onclick="goHome()">🏠 Home</button>
     </div>
-    <div class="nav-center">Made By CantBlockThis</div>
-    <div style="color: #666; font-size: 0.7rem;">ESC to Panic</div>
+    <div class="credit-text">Made By CantBlockThis</div>
+    <div class="panic-text">ESC to Panic</div>
 </nav>
 
 <div id="portal-home">
@@ -136,90 +188,47 @@
         <div class="card-img">🎮</div>
         <div class="card-info"><h3>Games Library</h3></div>
     </div>
-
     <div class="card" onclick="window.open('https://yandex.com/games/?pwa=1', '_blank')">
         <div class="card-img">🕹️</div>
         <div class="card-info"><h3>Yandex Games</h3></div>
     </div>
-
     <div class="card" onclick="loadInIframe('https://doxyedu.dpdns.org/')">
         <div class="card-img">🌐</div>
         <div class="card-info"><h3>Web Proxy</h3></div>
     </div>
-
-    <div id="custom-links-container" style="display: contents;"></div>
-
-    <div class="card add-btn" onclick="addShortcut()">
-        <div class="card-img">➕</div>
-        <div class="card-info"><h3>Add Shortcut</h3></div>
-    </div>
 </div>
 
-<iframe id="content-frame" src="about:blank" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+<iframe id="content-frame" src="about:blank" allowfullscreen="true"></iframe>
 
 <script>
     const frame = document.getElementById('content-frame');
-    const home = document.getElementById('portal-home');
-    const customContainer = document.getElementById('custom-links-container');
+    const portal = document.getElementById('portal-home');
+    const google = document.getElementById('google-home');
+    const pNav = document.getElementById('portal-nav');
 
-    window.onload = displayShortcuts;
+    function showPortal() {
+        google.style.display = 'none';
+        pNav.style.display = 'flex';
+        portal.style.display = 'grid';
+        document.body.style.background = "#0b0b0b";
+    }
 
     function goHome() {
         frame.style.display = 'none';
         frame.src = 'about:blank';
-        home.classList.remove('hidden');
+        pNav.style.display = 'flex';
+        portal.style.display = 'grid';
     }
 
     function loadInIframe(url) {
-        home.classList.add('hidden');
+        portal.style.display = 'none';
+        // We keep the Nav visible so the user can click "Home" or see the Panic key
+        pNav.style.display = 'flex'; 
         frame.style.display = 'block';
         frame.src = url;
     }
 
-    function addShortcut() {
-        const name = prompt("Name:");
-        if (!name) return;
-        let url = prompt("URL:");
-        if (!url) return;
-        if (!url.startsWith('http')) url = 'https://' + url;
-
-        const newShortcut = { id: Date.now(), name, url };
-        const savedLinks = JSON.parse(localStorage.getItem('myShortcuts') || '[]');
-        savedLinks.push(newShortcut);
-        localStorage.setItem('myShortcuts', JSON.stringify(savedLinks));
-        displayShortcuts();
-    }
-
-    function removeShortcut(id, event) {
-        event.stopPropagation();
-        let savedLinks = JSON.parse(localStorage.getItem('myShortcuts') || '[]');
-        savedLinks = savedLinks.filter(link => link.id !== id);
-        localStorage.setItem('myShortcuts', JSON.stringify(savedLinks));
-        displayShortcuts();
-    }
-
-    function displayShortcuts() {
-        customContainer.innerHTML = '';
-        const savedLinks = JSON.parse(localStorage.getItem('myShortcuts') || '[]');
-        
-        savedLinks.forEach(link => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.onclick = () => {
-                const newWin = window.open();
-                newWin.opener = null;
-                newWin.location.href = link.url;
-            };
-            card.innerHTML = `
-                <button class="delete-btn" onclick="removeShortcut(${link.id}, event)">×</button>
-                <div class="card-img">🔗</div>
-                <div class="card-info"><h3>${link.name}</h3></div>
-            `;
-            customContainer.appendChild(card);
-        });
-    }
-
-    // Updated Panic Key Listener
+    // Panic Key: Redirect to real Google
     window.addEventListener('keydown', function(event) {
         if (event.key === "Escape") {
             window.location.replace("https://www.google.com");
