@@ -44,22 +44,25 @@
         }
         .nav-btn:hover { background: #333; }
 
-        /* Home Grid - Fixed stretching */
+        /* Home Grid with Background */
         #portal-home {
             padding: 50px;
             display: grid;
             grid-template-columns: repeat(auto-fill, 220px);
-            grid-auto-rows: 200px; /* Fixed height for all cards */
+            grid-auto-rows: 200px;
             gap: 20px;
             height: calc(100vh - 50px);
-            background: radial-gradient(circle at top, #1a1a1a, #000);
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
             box-sizing: border-box;
             justify-content: center;
             overflow-y: auto;
         }
 
         .card {
-            background: #181818;
+            background: rgba(24, 24, 24, 0.9);
             border-radius: 12px;
             border: 1px solid #333;
             cursor: pointer;
@@ -69,15 +72,17 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
         .card:hover {
             transform: translateY(-5px);
             border-color: #00f2ff;
-            box-shadow: 0 5px 15px rgba(0, 242, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 242, 255, 0.4);
         }
 
-        .card-img { flex: 1; background: #222; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+        .card-img { flex: 1; background: rgba(34, 34, 34, 0.5); display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+
         .card-info { padding: 10px; background: #181818; border-top: 1px solid #333; }
         .card-info h3 { margin: 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
 
@@ -124,7 +129,12 @@
         <div class="card-info"><h3>Games Library</h3></div>
     </div>
 
-    <div class="card" onclick="loadInIframe('https://helios-browser.vercel.app/')">
+    <div class="card" onclick="window.open('https://yandex.com/games/?pwa=1', '_blank')">
+        <div class="card-img">🕹️</div>
+        <div class="card-info"><h3>Yandex Games</h3></div>
+    </div>
+
+    <div class="card" onclick="loadInIframe('https://doxyedu.dpdns.org/')">
         <div class="card-img">🌐</div>
         <div class="card-info"><h3>Web Proxy</h3></div>
     </div>
