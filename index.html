@@ -85,6 +85,26 @@
     const google = document.getElementById('google-home');
     const pNav = document.getElementById('portal-nav');
 
+    /**
+     * ANTI-LEAVE LOGIC
+     * Overwrites exit prompts to prevent "Leave site?" popups.
+     */
+    function killPopups() {
+        window.onbeforeunload = null;
+        window.onunload = null;
+        
+        // Attempt to suppress frame popups if same-origin
+        try {
+            if (frame.contentWindow) {
+                frame.contentWindow.onbeforeunload = null;
+                frame.contentWindow.onunload = null;
+            }
+        } catch (e) {}
+    }
+
+    // Repeatedly clear listeners every second
+    setInterval(killPopups, 1000);
+
     function showPortal() {
         google.style.display = 'none';
         pNav.style.display = 'flex';
@@ -93,6 +113,7 @@
     }
 
     function goHome() {
+        killPopups();
         frame.style.display = 'none';
         frame.src = 'about:blank';
         portal.style.display = 'grid';
@@ -105,8 +126,11 @@
         frame.src = url;
     }
 
+    // Panic Key
     window.addEventListener('keydown', function(event) {
         if (event.key === "Escape") {
+            killPopups();
+            // .replace() helps bypass history-based leave prompts
             window.location.replace("https://www.google.com");
         }
     });
