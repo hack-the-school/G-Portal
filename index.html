@@ -66,7 +66,7 @@
         <div class="card-info"><h3>Games</h3></div>
     </div>
 
-    <div class="card" onclick="loadInIframe('https://riot-emulator.vercel.app/')">
+    <div class="card" onclick="loadInIframe('https://emulatorjs.vercel.app/')">
         <div class="card-img">🕹️</div>
         <div class="card-info"><h3>Emulator</h3></div>
     </div>
@@ -85,15 +85,9 @@
     const google = document.getElementById('google-home');
     const pNav = document.getElementById('portal-nav');
 
-    /**
-     * ANTI-LEAVE LOGIC
-     * Overwrites exit prompts to prevent "Leave site?" popups.
-     */
     function killPopups() {
         window.onbeforeunload = null;
         window.onunload = null;
-        
-        // Attempt to suppress frame popups if same-origin
         try {
             if (frame.contentWindow) {
                 frame.contentWindow.onbeforeunload = null;
@@ -102,7 +96,6 @@
         } catch (e) {}
     }
 
-    // Repeatedly clear listeners every second
     setInterval(killPopups, 1000);
 
     function showPortal() {
@@ -126,11 +119,9 @@
         frame.src = url;
     }
 
-    // Panic Key
     window.addEventListener('keydown', function(event) {
         if (event.key === "Escape") {
             killPopups();
-            // .replace() helps bypass history-based leave prompts
             window.location.replace("https://www.google.com");
         }
     });
