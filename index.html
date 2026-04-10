@@ -61,7 +61,7 @@
 </nav>
 
 <div id="portal-home">
-    <div class="card" onclick="loadInIframe('https://blackoutgames.pages.dev/select')">
+    <div class="card" onclick="loadInIframe('https://the-pizza-edition.vercel.app/category/popular.html')">
         <div class="card-img">🎮</div>
         <div class="card-info"><h3>Games</h3></div>
     </div>
@@ -124,9 +124,8 @@
         frame.src = url;
     }
 
-    // Removed the choice prompt and replaced with direct redirection logic
     function chooseGames() {
-        loadInIframe('https://blackoutgames.pages.dev/select');
+        loadInIframe('https://the-pizza-edition.vercel.app/category/popular.html');
     }
 
     window.addEventListener('keydown', function(event) {
