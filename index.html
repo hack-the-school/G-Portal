@@ -81,6 +81,7 @@
     <div class="nav-left">
         <div class="logo">G-PORTAL</div>
         <button class="nav-btn" onclick="goHome()">🏠 Home</button>
+        <button class="nav-btn" onclick="loadDesktop()">🖥️ Desktop</button>
     </div>
     <div class="credit-text">Made By CantBlockThis</div>
     <div style="color: #666; font-size: 0.75rem;">ESC to Panic</div>
@@ -152,6 +153,10 @@
         frame.src = 'about:blank';
         portal.style.display = 'grid';
         pNav.style.display = 'flex';
+    }
+
+    function loadDesktop() {
+        loadInIframe('https://win11-emu-react.vercel.app/');
     }
 
     function loadInIframe(url) {
