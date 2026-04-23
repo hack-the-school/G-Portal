@@ -8,7 +8,7 @@
     <style>
         body, html { margin: 0; padding: 0; height: 100%; width: 100%; font-family: arial, sans-serif; background: #fff; overflow: hidden; }
         
-        /* The Form Overlay */
+        /* The Form Overlay (Restored) */
         #form-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9); display: flex; flex-direction: column;
@@ -114,7 +114,7 @@
         <div class="card-img">📺</div>
         <div class="card-info"><h3>YouTube</h3></div>
     </div>
-    <div class="card" onclick="loadInIframe('https://blackoutgames.pages.dev/search/')">
+    <div class="card" onclick="loadInIframe('https://doxyedu.dpdns.org/')">
         <div class="card-img">🌐</div>
         <div class="card-info"><h3>Proxy</h3></div>
     </div>
@@ -173,6 +173,7 @@
     const pNav = document.getElementById('portal-nav');
     const formOverlay = document.getElementById('form-overlay');
 
+    // Restored Logic to dismiss the form
     function dismissForm() {
         formOverlay.style.display = 'none';
     }
