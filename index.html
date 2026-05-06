@@ -46,9 +46,24 @@
             justify-content: space-between; border-bottom: 1px solid #333; height: 55px; box-sizing: border-box; color: white;
             font-family: 'Segoe UI', sans-serif;
         }
-        .nav-left { display: flex; align-items: center; gap: 25px; }
+        .nav-left { display: flex; align-items: center; gap: 20px; }
         .logo { font-weight: bold; color: #00f2ff; letter-spacing: 1px; }
         .nav-btn { background: #222; color: white; border: 1px solid #444; padding: 6px 14px; border-radius: 4px; cursor: pointer; }
+
+        /* Cursor Switch Styling */
+        .switch-container { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; color: #aaa; }
+        .switch { position: relative; display: inline-block; width: 34px; height: 20px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #333; transition: .4s; border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px;
+            background-color: white; transition: .4s; border-radius: 50%;
+        }
+        input:checked + .slider { background-color: #00f2ff; }
+        input:checked + .slider:before { transform: translateX(14px); }
 
         /* Grid Containers */
         #portal-home, #games-library {
@@ -96,6 +111,14 @@
         <div class="logo">G-PORTAL</div>
         <button class="nav-btn" onclick="goHome()">🏠 Home</button>
         <button class="nav-btn" onclick="loadDesktop()">🖥️ Desktop</button>
+        
+        <div class="switch-container">
+            <span>FX</span>
+            <label class="switch">
+                <input type="checkbox" id="cursor-toggle" checked onchange="toggleCursor(this)">
+                <span class="slider"></span>
+            </label>
+        </div>
     </div>
     <div class="credit-text">Made By CantBlockThis</div>
     <div style="color: #666; font-size: 0.75rem;">ESC to Panic</div>
@@ -169,6 +192,7 @@
 
 <iframe id="content-frame" src="about:blank" allowfullscreen="true"></iframe>
 
+<script src="https://unpkg.com/cursor-effects@latest/dist/browser.js"></script>
 <script>
     const frame = document.getElementById('content-frame');
     const portal = document.getElementById('portal-home');
@@ -176,6 +200,8 @@
     const google = document.getElementById('google-home');
     const pNav = document.getElementById('portal-nav');
     const formOverlay = document.getElementById('form-overlay');
+
+    let cursorInstance = null;
 
     function dismissForm() {
         formOverlay.style.display = 'none';
@@ -193,6 +219,28 @@
     }
 
     setInterval(killPopups, 1000);
+
+    // Cursor Logic
+    function initCursor() {
+        if (!cursorInstance) {
+            cursorInstance = new cursoreffects.trailingCursor({
+                particles: 15,
+                rate: 0.4,
+                baseImageSrc: null 
+            });
+        }
+    }
+
+    function toggleCursor(checkbox) {
+        if (checkbox.checked) {
+            initCursor();
+        } else {
+            if (cursorInstance) {
+                cursorInstance.destroy();
+                cursorInstance = null;
+            }
+        }
+    }
 
     function showPortal() {
         google.style.display = 'none';
@@ -240,18 +288,9 @@
             panic();
         }
     });
-</script>
 
-<script src="https://unpkg.com/cursor-effects@latest/dist/browser.js"></script>
-<script>
     window.addEventListener('load', () => {
-        // Particles: 15 creates that long "snake" trail
-        // Rate: 0.4 ensures a smooth, dragging motion
-        new cursoreffects.trailingCursor({
-            particles: 15,
-            rate: 0.4,
-            baseImageSrc: null 
-        });
+        initCursor();
     });
 </script>
 
