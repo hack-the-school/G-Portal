@@ -8,7 +8,6 @@
     <style>
         body, html { margin: 0; padding: 0; height: 100%; width: 100%; font-family: arial, sans-serif; background: #fff; overflow: hidden; }
         
-        /* The Form Overlay */
         #form-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9); display: flex; flex-direction: column;
@@ -27,20 +26,17 @@
         }
         .close-form-btn:hover { background: #00c8d4; transform: scale(1.05); }
 
-        /* Mobile Panic Button */
         #mobile-panic {
             position: fixed; top: 10px; right: 10px; z-index: 20001;
             background: #ff4444; color: white; border: none; padding: 10px 15px;
             border-radius: 5px; font-weight: bold; display: none; cursor: pointer;
         }
 
-        /* Fake Google Page */
         #google-home { display: flex; flex-direction: column; height: 100vh; align-items: center; background: #fff; position: relative; z-index: 20; }
         .search-container { flex: 1; display: flex; flex-direction: column; align-items: center; padding-top: 100px; width: 100%; }
         .google-logo { width: 272px; margin-bottom: 30px; cursor: pointer; }
         .search-bar { width: 100%; max-width: 584px; height: 44px; border: 1px solid #dfe1e5; border-radius: 24px; padding: 0 45px; box-sizing: border-box; outline: none; font-size: 16px; }
         
-        /* Portal Header */
         #portal-nav {
             display: none; background-color: #000; padding: 0 20px; align-items: center;
             justify-content: space-between; border-bottom: 1px solid #333; height: 55px; box-sizing: border-box; color: white;
@@ -50,7 +46,6 @@
         .logo { font-weight: bold; color: #00f2ff; letter-spacing: 1px; }
         .nav-btn { background: #222; color: white; border: 1px solid #444; padding: 6px 14px; border-radius: 4px; cursor: pointer; }
 
-        /* Grid Containers */
         #portal-home, #games-library {
             padding: 50px; display: none; grid-template-columns: repeat(auto-fill, 220px);
             grid-auto-rows: 200px; gap: 20px; height: calc(100vh - 55px); background: transparent;
@@ -60,22 +55,41 @@
         .card {
             background: rgba(24, 24, 24, 0.9); border-radius: 12px; border: 1px solid #333; cursor: pointer;
             text-align: center; display: flex; flex-direction: column; overflow: hidden; color: white; transition: 0.3s;
+            position: relative;
         }
-        .card:hover { border-color: #00f2ff; transform: translateY(-5px); }
+        .card:hover { border-color: #00f2ff; transform: translateY(-5px) !important; }
         .card-img { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 3rem; background: #222; }
         .card-info { padding: 10px; background: #181818; border-top: 1px solid #333; }
         .card-info h3 { margin: 0; font-size: 0.85rem; text-transform: uppercase; }
 
-        /* Background & Frame */
-        #matrix-bg {
-            position: fixed; top: 55px; left: 0; width: 100%; height: calc(100vh - 55px);
-            border: none; z-index: 1; display: none;
+        /* --- ADVANCED CHAT EFFECTS --- */
+        .glow-card { border-color: #00f2ff !important; }
+        
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 5px rgba(0, 242, 255, 0.4); border-color: #00f2ff; }
+            50% { box-shadow: 0 0 25px rgba(0, 242, 255, 0.9); border-color: #fff; }
+            100% { box-shadow: 0 0 5px rgba(0, 242, 255, 0.4); border-color: #00f2ff; }
         }
+
+        .shimmer::after {
+            content: ''; position: absolute; top: -50%; left: -60%; width: 30%; height: 200%;
+            background: rgba(255, 255, 255, 0.15); transform: rotate(30deg); animation: shimmer-swipe 4s infinite;
+        }
+        @keyframes shimmer-swipe { 0% { left: -60%; } 15% { left: 120%; } 100% { left: 120%; } }
+
+        .float-anim { animation: floating 3s ease-in-out infinite, pulse-glow 2s infinite; }
+        @keyframes floating { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        .badge-container { position: absolute; top: 10px; right: 10px; display: flex; align-items: center; gap: 6px; z-index: 5; }
+        .badge { background: #ff4444; color: white; font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .ping-dot { width: 8px; height: 8px; background: #00ff00; border-radius: 50%; animation: ping 1.5s infinite; }
+        @keyframes ping { 0% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.7); } 100% { transform: scale(2.5); opacity: 0; box-shadow: 0 0 0 10px rgba(0, 255, 0, 0); } }
+        /* ---------------------------- */
+
+        #matrix-bg { position: fixed; top: 55px; left: 0; width: 100%; height: calc(100vh - 55px); border: none; z-index: 1; display: none; }
         #content-frame { width: 100%; height: calc(100vh - 55px); border: none; display: none; position: relative; z-index: 40; background: #000; }
 
-        @media (max-width: 768px) {
-            #mobile-panic { display: block; }
-        }
+        @media (max-width: 768px) { #mobile-panic { display: block; } }
     </style>
 </head>
 <body>
@@ -113,10 +127,16 @@
         <div class="card-img">🎮</div>
         <div class="card-info"><h3>Games Library</h3></div>
     </div>
-    <div class="card" onclick="openInNewTab('https://try-nexus.base44.app/')">
+    
+    <div class="card glow-card shimmer float-anim" onclick="openInNewTab('https://try-nexus.base44.app/')">
+        <div class="badge-container">
+            <div class="ping-dot"></div>
+            <div class="badge">LIVE CHAT</div>
+        </div>
         <div class="card-img">💬</div>
-        <div class="card-info"><h3>Chat</h3></div>
+        <div class="card-info"><h3>Connect <span style="color: #00f2ff;">(Active)</span></h3></div>
     </div>
+
     <div class="card" onclick="openInNewTab('https://yewtu.be/feed/trending?type=Gaming&region=US')">
         <div class="card-img">📺</div>
         <div class="card-info"><h3>YouTube</h3></div>
@@ -185,21 +205,12 @@
     const formOverlay = document.getElementById('form-overlay');
     const matrix = document.getElementById('matrix-bg');
 
-    function dismissForm() {
-        formOverlay.style.display = 'none';
-    }
-
+    function dismissForm() { formOverlay.style.display = 'none'; }
     function killPopups() {
         window.onbeforeunload = null;
         window.onunload = null;
-        try {
-            if (frame.contentWindow) {
-                frame.contentWindow.onbeforeunload = null;
-                frame.contentWindow.onunload = null;
-            }
-        } catch (e) {}
+        try { if (frame.contentWindow) { frame.contentWindow.onbeforeunload = null; frame.contentWindow.onunload = null; } } catch (e) {}
     }
-
     setInterval(killPopups, 1000);
 
     function showPortal() {
@@ -209,48 +220,22 @@
         matrix.style.display = 'block';
         document.body.style.background = "#0b0b0b";
     }
-
-    function openGames() {
-        portal.style.display = 'none';
-        games.style.display = 'grid';
-    }
-
+    function openGames() { portal.style.display = 'none'; games.style.display = 'grid'; }
     function goHome() {
         killPopups();
-        frame.style.display = 'none';
-        frame.src = 'about:blank';
-        games.style.display = 'none';
-        portal.style.display = 'grid';
-        pNav.style.display = 'flex';
-        matrix.style.display = 'block';
+        frame.style.display = 'none'; frame.src = 'about:blank';
+        games.style.display = 'none'; portal.style.display = 'grid';
+        pNav.style.display = 'flex'; matrix.style.display = 'block';
     }
-
-    function loadDesktop() {
-        loadInIframe('https://win11-emu-react.vercel.app/');
-    }
-
+    function loadDesktop() { loadInIframe('https://win11-emu-react.vercel.app/'); }
     function loadInIframe(url) {
-        portal.style.display = 'none';
-        games.style.display = 'none';
-        matrix.style.display = 'none'; 
-        frame.style.display = 'block';
+        portal.style.display = 'none'; games.style.display = 'none';
+        matrix.style.display = 'none'; frame.style.display = 'block';
         frame.src = url;
     }
-
-    function openInNewTab(url) {
-        window.open(url, '_blank').focus();
-    }
-
-    function panic() {
-        killPopups();
-        window.location.replace("https://www.google.com");
-    }
-
-    window.addEventListener('keydown', function(event) {
-        if (event.key === "Escape") {
-            panic();
-        }
-    });
+    function openInNewTab(url) { window.open(url, '_blank').focus(); }
+    function panic() { killPopups(); window.location.replace("https://www.google.com"); }
+    window.addEventListener('keydown', (e) => { if (e.key === "Escape") panic(); });
 </script>
 
 </body>
