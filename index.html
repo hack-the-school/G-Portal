@@ -8,41 +8,6 @@
     <style>
         body, html { margin: 0; padding: 0; height: 100%; width: 100%; font-family: arial, sans-serif; background: #fff; overflow: hidden; }
         
-        /* --- POPUP OVERLAY STYLES --- */
-        #form-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.95); display: flex; flex-direction: column;
-            align-items: center; justify-content: center; z-index: 10000;
-        }
-        .form-container {
-            width: 90%; max-width: 600px; background: #fff;
-            border-radius: 12px; overflow: hidden; position: relative;
-            box-shadow: 0 0 40px rgba(0, 242, 255, 0.6);
-            padding: 40px; text-align: center;
-        }
-        .announcement-img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            margin-bottom: 25px;
-        }
-        .announcement-text h2 {
-            font-size: 2rem;
-            color: #000;
-            margin: 0 0 15px 0;
-        }
-        .announcement-text p {
-            font-size: 1.1rem;
-            color: #333;
-            line-height: 1.5;
-        }
-        .close-form-btn {
-            margin-top: 20px; padding: 12px 40px; background: #00f2ff;
-            color: #000; border: none; border-radius: 5px; font-weight: bold;
-            cursor: pointer; font-size: 1rem; transition: 0.2s;
-        }
-        .close-form-btn:hover { background: #00c8d4; transform: scale(1.05); }
-
         /* --- PORTAL STYLES --- */
         #mobile-panic {
             position: fixed; top: 10px; right: 10px; z-index: 20001;
@@ -104,18 +69,6 @@
 
 <button id="mobile-panic" onclick="panic()">EXIT</button>
 
-<div id="form-overlay">
-    <div class="form-container">
-        <img src="ChatGPT Image May 14, 2026, 08_19_20 PM.png" alt="Reverse Blocksi Logo" class="announcement-img">
-        <div class="announcement-text">
-            <h2>Introducing Reverse Blocksi</h2>
-            <p>Instead of teachers blocking you, you will block them.</p>
-            <p style="color: #666; font-size: 0.9rem; font-weight: bold; margin-top: 10px;">Releasing 2027</p>
-        </div>
-    </div>
-    <button class="close-form-btn" onclick="dismissForm()">Enter Site</button>
-</div>
-
 <div id="google-home">
     <div class="search-container">
         <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" class="google-logo" alt="Google" onclick="showPortal()">
@@ -150,15 +103,17 @@
         <div class="card-info"><h3>Connect <span style="color: #00f2ff;">(Active)</span></h3></div>
     </div>
 
-    <div class="card" onclick="openInNewTab('https://yewtu.be/feed/trending?type=Gaming&region=US')">
+    <div class="card" onclick="openInNewTab('https://yewtu.be/feed/trending?type=Gaming/#google_vignette/')">
         <div class="card-img">📺</div>
         <div class="card-info"><h3>YouTube</h3></div>
     </div>
-    <div class="card" onclick="loadInIframe('https://doxyedu.dpdns.org/')">
+
+    <div class="card" onclick="loadInIframe('https://blackoutgames.pages.dev/search/')">
         <div class="card-img">🌐</div>
         <div class="card-info"><h3>Proxy</h3></div>
     </div>
-    <div class="card" onclick="loadInIframe('https://soundboardguys.com/sort/trending')">
+
+    <div class="card" onclick="loadInIframe('https://soundboardguys.com/#google_vignette/')">
         <div class="card-img">🔊</div>
         <div class="card-info"><h3>SoundBoard</h3></div>
     </div>
@@ -215,10 +170,7 @@
     const games = document.getElementById('games-library');
     const google = document.getElementById('google-home');
     const pNav = document.getElementById('portal-nav');
-    const formOverlay = document.getElementById('form-overlay');
     const matrix = document.getElementById('matrix-bg');
-
-    function dismissForm() { formOverlay.style.display = 'none'; }
     
     function killPopups() {
         window.onbeforeunload = null;
