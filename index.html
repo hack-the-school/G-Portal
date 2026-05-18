@@ -129,6 +129,7 @@
 
         @media (max-width: 768px) { #mobile-panic { display: block; } }
     </style>
+    <script src="https://js.pusher.com/8.3.0/pusher.min.js"></script>
 </head>
 <body>
 
@@ -209,6 +210,21 @@
         <div class="card-info"><h3>Movies</h3></div>
     </div>
 
+    <div class="card" onclick="openInNewTab('https://www.snapchat.com/discover#google_vignette/')">
+        <div class="card-img">👻</div>
+        <div class="card-info"><h3>Snapchat</h3></div>
+    </div>
+
+    <div class="card" onclick="openInNewTab('https://www.pinterest.com/#google_vignette/')">
+        <div class="card-img">📌</div>
+        <div class="card-info"><h3>Pinterest</h3></div>
+    </div>
+
+    <div class="card" onclick="openInNewTab('https://www.tiktok.com/#google_vignette')">
+        <div class="card-img">🎵</div>
+        <div class="card-info"><h3>TikTok</h3></div>
+    </div>
+
     <div class="card" onclick="loadInIframe('https://blackoutgames.pages.dev/search/')">
         <div class="card-img">🌐</div>
         <div class="card-info"><h3>Proxy</h3></div>
@@ -283,58 +299,28 @@
     let audioCtx = null;
     let isModded = false;
 
-    // --- SECURE PUBLIC REALTIME SIGNAL TUNNEL ---
-    const APP_KEY = 'dbd30ae51ed01fc80f82'; 
+    // --- ENHANCED REALTIME ROUTING SUITE ---
+    const PUSHER_KEY = 'dbd30ae51ed01fc80f82'; 
+    const PUSHER_CLUSTER = 'us2'; 
     const browserId = Math.random().toString(36).substring(7);
-    
-    // We open a direct raw WebSocket bridge using Pusher's live unauthenticated event interface
-    const ws = new WebSocket(`wss://ws-us2.pusher.com/app/${APP_KEY}?protocol=7&client=js&version=8.3.0&flash=false`);
 
-    ws.onmessage = (event) => {
-        const msg = JSON.parse(event.data);
-        
-        // When connecting, subscribe to our global public sync pipeline channel
-        if (msg.event === 'pusher:connection_established') {
-            ws.send(JSON.stringify({
-                event: 'pusher:subscribe',
-                data: { channel: 'global-troll-pipeline' }
-            }));
-        } 
-        // When someone triggers an event, extract it and process across the network
-        else if (msg.event === 'network-broadcast') {
-            const data = JSON.parse(msg.data);
-            if (data.sender !== browserId) {
-                executeLocalEffect(data.effect);
-            }
+    // Initialize custom multi-room mesh routing
+    const pusher = new Pusher(PUSHER_KEY, {
+        cluster: PUSHER_CLUSTER,
+        forceTLS: true,
+        userAuthentication: { endpoint: null }, 
+        channelAuthorization: { endpoint: null } 
+    });
+
+    // Subscribing to an unauthenticated public communication wire
+    const channel = pusher.subscribe('global-troll-wire');
+
+    // Handle peer to peer network signals 
+    channel.bind('broadcast-effect', function(data) {
+        if (data.sender !== browserId) {
+            executeLocalEffect(data.effect);
         }
-    };
-
-    // Trigger & Global Broadcast routine
-    function triggerEffect(effectName) {
-        executeLocalEffect(effectName); // Fire on your own screen instantly
-        
-        // Post packet up to the public relay to mirror to everyone else
-        // We use a free backup proxy connection layout to force client-event routing over public pipelines
-        fetch(`https://api-us2.pusher.com/apps/2156294/events`, {
-            method: 'POST',
-            mode: 'no-cors', // Bypasses browser cross-origin policy block rules
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                name: 'network-broadcast',
-                channels: ['global-troll-pipeline'],
-                data: JSON.stringify({ effect: effectName, sender: browserId })
-            })
-        }).catch(() => {});
-
-        // Fallback network pump trigger
-        try {
-            ws.send(JSON.stringify({
-                event: 'network-broadcast',
-                channel: 'global-troll-pipeline',
-                data: { effect: effectName, sender: browserId }
-            }));
-        } catch(e){}
-    }
+    });
     
     function killPopups() {
         window.onbeforeunload = null;
@@ -363,7 +349,7 @@
         }
     }
 
-    // Portal Navigation Controllers
+    // Comprehensive audio and visual layout routing functions
     function showPortal() {
         google.style.display = 'none'; pNav.style.display = 'flex';
         portal.style.display = 'grid'; matrix.style.display = 'block';
@@ -402,7 +388,15 @@
         osc.start(); osc.stop(audioCtx.currentTime + duration);
     }
 
-    // Full Implementation Action Processing Engine
+    // Trigger & Global Network Sync Relay
+    function triggerEffect(effectName) {
+        executeLocalEffect(effectName); // Execute on local instance immediately
+        
+        // Emits payload back onto client loop connection
+        channel.emit('broadcast-effect', { effect: effectName, sender: browserId });
+    }
+
+    // Comprehensive Audio and Animation Processing Hub
     function executeLocalEffect(effectName) {
         if (effectName === 'earrape') {
             for(let i=0; i<5; i++) { playTone(120, 'sawtooth', 2.0, 0.8); playTone(100, 'square', 2.0, 0.8); }
@@ -466,8 +460,7 @@
             for (let i = 0; i < 15; i++) {
                 setTimeout(() => {
                     let b = document.createElement('div');
-                    b.className = 'baby-drop';
-                    b.innerHTML = '👶';
+                    b.className = 'baby-drop'; b.innerHTML = '👶';
                     b.style.left = Math.random() * 90 + 'vw';
                     b.style.animationDuration = (Math.random() * 2 + 1) + 's';
                     document.body.appendChild(b);
@@ -477,14 +470,13 @@
         }
         else if (effectName === 'nuke') {
             let flash = document.createElement('div');
-            flash.className = 'nuke-flash';
-            document.body.appendChild(flash);
+            flash.className = 'nuke-flash'; document.body.appendChild(flash);
             [100, 60, 40].forEach(f => playTone(f, 'sawtooth', 2.0, 0.9));
             setTimeout(() => { flash.remove(); document.body.className = ''; goHome(); }, 2500);
         }
     }
 
-    /* --- DRAGGING ENGINE (MOUSE & TOUCH INTEGRATED) --- */
+    /* --- DRAGGING SUITE (INTEGRATED TOUCH + MOUSE) --- */
     function makeElementDraggable(dragElem, targetContainer, clickCallback) {
         let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
         let hasMoved = false;
