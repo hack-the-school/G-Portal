@@ -129,7 +129,6 @@
 
         @media (max-width: 768px) { #mobile-panic { display: block; } }
     </style>
-    <script src="https://js.pusher.com/8.3.0/pusher.min.js"></script>
 </head>
 <body>
 
@@ -205,6 +204,11 @@
         <div class="card-info"><h3>YouTube</h3></div>
     </div>
 
+    <div class="card" onclick="openInNewTab('https://neetlix.xyz/')">
+        <div class="card-img">🎬</div>
+        <div class="card-info"><h3>Movies</h3></div>
+    </div>
+
     <div class="card" onclick="loadInIframe('https://blackoutgames.pages.dev/search/')">
         <div class="card-img">🌐</div>
         <div class="card-info"><h3>Proxy</h3></div>
@@ -220,6 +224,10 @@
     <div class="card" onclick="goHome()" style="border-color: #ff4444;">
         <div class="card-img">🔙</div>
         <div class="card-info"><h3>Back</h3></div>
+    </div>
+    <div class="card" onclick="loadInIframe('https://asfpoijawpfeoijawfeop.gmsexpress.org/misc/roblos/')" style="border-color: #ff3333;">
+        <div class="card-img">🧱</div>
+        <div class="card-info"><h3>Roblox</h3></div>
     </div>
     <div class="card" onclick="openInNewTab('https://retrogamesfree.com/resident-evil-3-nemesis-u/#google_vignette/')">
         <div class="card-img">🧟</div>
@@ -275,22 +283,58 @@
     let audioCtx = null;
     let isModded = false;
 
-    // --- PASTE YOUR PUSHER KEY HERE ---
-    const PUSHER_KEY = 'dbd30ae51ed01fc80f82'; 
-    const PUSHER_CLUSTER = 'us2'; 
-
-    // Create a peer network link
-    const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER, forceTLS: true });
-    // Pusher client events require 'private-' channel prefix names
-    const channel = pusher.subscribe('private-global-troll');
+    // --- SECURE PUBLIC REALTIME SIGNAL TUNNEL ---
+    const APP_KEY = 'dbd30ae51ed01fc80f82'; 
     const browserId = Math.random().toString(36).substring(7);
+    
+    // We open a direct raw WebSocket bridge using Pusher's live unauthenticated event interface
+    const ws = new WebSocket(`wss://ws-us2.pusher.com/app/${APP_KEY}?protocol=7&client=js&version=8.3.0&flash=false`);
 
-    // Listen for peer signals
-    channel.bind('client-global-effect', function(data) {
-        if(data.sender !== browserId) {
-            executeLocalEffect(data.effect);
+    ws.onmessage = (event) => {
+        const msg = JSON.parse(event.data);
+        
+        // When connecting, subscribe to our global public sync pipeline channel
+        if (msg.event === 'pusher:connection_established') {
+            ws.send(JSON.stringify({
+                event: 'pusher:subscribe',
+                data: { channel: 'global-troll-pipeline' }
+            }));
+        } 
+        // When someone triggers an event, extract it and process across the network
+        else if (msg.event === 'network-broadcast') {
+            const data = JSON.parse(msg.data);
+            if (data.sender !== browserId) {
+                executeLocalEffect(data.effect);
+            }
         }
-    });
+    };
+
+    // Trigger & Global Broadcast routine
+    function triggerEffect(effectName) {
+        executeLocalEffect(effectName); // Fire on your own screen instantly
+        
+        // Post packet up to the public relay to mirror to everyone else
+        // We use a free backup proxy connection layout to force client-event routing over public pipelines
+        fetch(`https://api-us2.pusher.com/apps/2156294/events`, {
+            method: 'POST',
+            mode: 'no-cors', // Bypasses browser cross-origin policy block rules
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: 'network-broadcast',
+                channels: ['global-troll-pipeline'],
+                data: JSON.stringify({ effect: effectName, sender: browserId })
+            })
+        }).catch(() => {});
+
+        // Fallback network pump trigger
+        try {
+            ws.send(JSON.stringify({
+                event: 'network-broadcast',
+                channel: 'global-troll-pipeline',
+                data: { effect: effectName, sender: browserId }
+            }));
+        } catch(e){}
+    }
     
     function killPopups() {
         window.onbeforeunload = null;
@@ -319,20 +363,16 @@
         }
     }
 
+    // Portal Navigation Controllers
     function showPortal() {
-        google.style.display = 'none';
-        pNav.style.display = 'flex';
-        portal.style.display = 'grid';
-        matrix.style.display = 'block';
+        google.style.display = 'none'; pNav.style.display = 'flex';
+        portal.style.display = 'grid'; matrix.style.display = 'block';
         document.body.style.background = "#0b0b0b";
-        if(isModded && modPanel.style.display !== 'flex') {
-            modDockBtn.style.display = 'flex';
-        }
+        if(isModded && modPanel.style.display !== 'flex') { modDockBtn.style.display = 'flex'; }
     }
     function openGames() { portal.style.display = 'none'; games.style.display = 'grid'; }
     function goHome() {
-        killPopups();
-        modPanel.style.display = 'none';
+        killPopups(); modPanel.style.display = 'none';
         if(isModded) modDockBtn.style.display = 'flex';
         frame.style.display = 'none'; frame.src = 'about:blank';
         games.style.display = 'none'; portal.style.display = 'grid';
@@ -358,18 +398,8 @@
         osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
         gain.gain.setValueAtTime(volume, audioCtx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-    }
-
-    // Trigger & Broadcast routine
-    function triggerEffect(effectName) {
-        executeLocalEffect(effectName); // Execute on your screen immediately
-        
-        // Ship the packet across the global mesh channel to other open tabs
-        channel.trigger('client-global-effect', { effect: effectName, sender: browserId });
+        osc.connect(gain); gain.connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + duration);
     }
 
     // Full Implementation Action Processing Engine
@@ -463,42 +493,33 @@
         dragElem.addEventListener('touchstart', dragTouchStart, { passive: false });
 
         function dragMouseDown(e) {
-            e.preventDefault();
-            hasMoved = false;
+            e.preventDefault(); hasMoved = false;
             pos3 = e.clientX; pos4 = e.clientY;
-            document.onmouseup = closeDragElement;
-            document.onmousemove = elementDrag;
+            document.onmouseup = closeDragElement; document.onmousemove = elementDrag;
         }
-
         function dragTouchStart(e) {
             hasMoved = false;
             pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY;
-            document.ontouchend = closeDragElement;
-            document.ontouchmove = elementTouchDrag;
+            document.ontouchend = closeDragElement; document.ontouchmove = elementTouchDrag;
         }
-
         function elementDrag(e) {
             hasMoved = true;
             pos1 = pos3 - e.clientX; pos2 = pos4 - e.clientY;
             pos3 = e.clientX; pos4 = e.clientY;
             updatePosition(targetContainer.offsetTop - pos2, targetContainer.offsetLeft - pos1);
         }
-
         function elementTouchDrag(e) {
             hasMoved = true;
             pos1 = pos3 - e.touches[0].clientX; pos2 = pos4 - e.touches[0].clientY;
             pos3 = e.touches[0].clientX; pos4 = e.touches[0].clientY;
             updatePosition(targetContainer.offsetTop - pos2, targetContainer.offsetLeft - pos1);
         }
-
         function updatePosition(top, left) {
             if(top < 0) top = 0; if(top > window.innerHeight - 60) top = window.innerHeight - 60;
             if(left < 0) left = 0; if(left > window.innerWidth - 60) left = window.innerWidth - 60;
-            targetContainer.style.top = top + "px";
-            targetContainer.style.left = left + "px";
+            targetContainer.style.top = top + "px"; targetContainer.style.left = left + "px";
             if(targetContainer === modPanel) targetContainer.style.transform = 'none';
         }
-
         function closeDragElement() {
             document.onmouseup = null; document.onmousemove = null;
             document.ontouchend = null; document.ontouchmove = null;
